@@ -7,3 +7,5 @@ data hazards are handled , no exception handling , no data memory delay
 phase 2 : adding memory 3 clock cycle delay , handling all new data and structural hazards
 
 phase 3 : cache added for reducing memory delay
+
+phase 4 : super-scalar implemented without cache and memory delay
