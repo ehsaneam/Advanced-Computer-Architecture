@@ -2,7 +2,7 @@ module cache_top(clk , rst, INWriteReg , memtoreg , memwrite , INAddress , INWri
 	input clk , rst , memtoreg , memwrite;
 	input [31:0] INAddress,INWriteData;
 	input [4:0] INWriteReg;
-	output reg[4:0] OUTWriteReg;
+	output [4:0] OUTWriteReg;
 	output hit,cache_dataReady;
 	output [31:0] read_data_word;
 	
@@ -11,6 +11,7 @@ module cache_top(clk , rst, INWriteReg , memtoreg , memwrite , INAddress , INWri
 	wire [511:0] WriteData_DM,writeback2DM,WriteDataBlock_DM2cache;
 	reg [31:0] Address_DM_reg,bufferLostWD,bufferLostAD,bufferWBAD;
 	reg [511:0] write_buffer,WriteData_DM_reg;
+	reg[4:0] OUTWriteReg_buf;
 	
 	cache_controller CC(clk, rst, hit, dirty_cache2cc, memtoreg, memwrite, we_cc2dm, we_word_cc2cache,
 					we_block_cc2cache, bufferLostWD_enable , WritebackSignal,CacheLdFromBuffer,cache_dataReady);
@@ -20,7 +21,7 @@ module cache_top(clk , rst, INWriteReg , memtoreg , memwrite , INAddress , INWri
 	
 	always@(posedge clk)begin
 		if(memtoreg)
-			OUTWriteReg <= INWriteReg;
+			OUTWriteReg_buf <= INWriteReg;
 		if(memtoreg | memwrite | we_cc2dm)
 			Address_DM_reg <= Address_DM;
 		if(we_cc2dm)
@@ -57,4 +58,5 @@ module cache_top(clk , rst, INWriteReg , memtoreg , memwrite , INAddress , INWri
 		({we_block_cc2cache,bufferLostAD[5:2]}==5'b11110)?WriteDataBlock_DM2cache[479:448]:
 		({we_block_cc2cache,bufferLostAD[5:2]}==5'b11111)?WriteDataBlock_DM2cache[511:480]:
 		cache_readdata_word;
+	assign OUTWriteReg = (memtoreg)? INWriteReg:OUTWriteReg_buf;
 endmodule

@@ -51,7 +51,7 @@ module Hazard_Unit(CLK,CLR,hit,RsD,RtD,RsE,RtE,MemWriteD,MemWriteM,MemtoRegD,Mem
   assign nothitstall = (counter5>0) & (MemWriteD | MemtoRegD);
   assign lwstall = ((RsD == RtE) | (RtD == RtE)) & MemtoRegE;
   assign lwstall2 = (((RsD == WriteRegM) | (RtD == WriteRegM)) & (MemtoRegM & ~hit)) | (counter3>0);
-  assign StallF = (nothitstall | lwstall2 | lwstall_reg | MemtoRegE | WBstall)&(~PCSrcE & ~PCSrc_Reg);
-  assign StallD = (nothitstall | lwstall2 | lwstall_reg | MemtoRegE | WBstall)&(~PCSrcE & ~PCSrc_Reg);
-  assign FlushE = PCSrcE | PCSrc_Reg | lwstall2 | nothitstall | lwstall_reg | MemtoRegE | WBstall;
+  assign StallF = (nothitstall | lwstall2 | lwstall | WBstall)&(~PCSrcE & ~PCSrc_Reg);
+  assign StallD = (nothitstall | lwstall2 | lwstall | WBstall)&(~PCSrcE & ~PCSrc_Reg);
+  assign FlushE = PCSrcE | PCSrc_Reg | lwstall2 | nothitstall | lwstall | WBstall;
 endmodule

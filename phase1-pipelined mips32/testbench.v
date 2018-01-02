@@ -19,7 +19,7 @@ module testbench;
    initial
       $readmemh("isort32.hex", ACA_MIPS.im.RAM);
 
-   parameter end_pc = 32'h80;
+   parameter end_pc = 32'h90;
 
    integer i;
    always @(ACA_MIPS.PCF)

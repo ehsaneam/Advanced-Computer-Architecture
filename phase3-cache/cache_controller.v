@@ -33,7 +33,8 @@ module cache_controller(clk,rst,hit,dirty,memtoreg,memwrite,DM_WE,cache_we_word,
 					cache_we_word <= 1'b0;
 					cache_dataReady <= 1'b0;
 					if(memtoreg & hit)begin					
-						ns <= READ;
+						cache_dataReady <= 1'b1;
+						ns <= IDLE;
 					end
 					else if(memtoreg & ~hit)begin
 						WritebackSignal = 1'b1;
@@ -51,10 +52,10 @@ module cache_controller(clk,rst,hit,dirty,memtoreg,memwrite,DM_WE,cache_we_word,
 					else
 						ns <= IDLE;
 				end
-				READ:begin
-					cache_dataReady <= 1'b1;
-					ns <= IDLE;
-				end
+				// READ:begin
+					// cache_dataReady <= 1'b1;
+					// ns <= IDLE;
+				// end
 				READLOST:begin
 					WritebackSignal = 1'b0;
 					if(counter2bR == 2'd2)begin

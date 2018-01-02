@@ -4,7 +4,7 @@ module cache(clk , rst , memory_address , write_data_block , write_data_word, re
 	input [511:0] write_data_block;
 	input clk,rst,we_block,we_word;
 	output [511:0] read_data_block;
-	output reg[31:0] read_data_word;
+	output [31:0] read_data_word;
 	output [31:0] addout;
 	output hit,dirty;
 	
@@ -19,25 +19,6 @@ module cache(clk , rst , memory_address , write_data_block , write_data_word, re
 		if(~rst)begin
 			cache_data[539:512] <= {1'b0,1'b0,tag};
 		end
-		else begin
-		case(block_offset)
-			4'b0000:read_data_word <= cache_data[31:0];
-			4'b0001:read_data_word <= cache_data[63:32];
-			4'b0010:read_data_word <= cache_data[95:64];
-			4'b0011:read_data_word <= cache_data[127:96];
-			4'b0100:read_data_word <= cache_data[159:128];
-			4'b0101:read_data_word <= cache_data[191:160];
-			4'b0110:read_data_word <= cache_data[223:192];
-			4'b0111:read_data_word <= cache_data[255:224];
-			4'b1000:read_data_word <= cache_data[287:256];
-			4'b1001:read_data_word <= cache_data[319:288];
-			4'b1010:read_data_word <= cache_data[351:320];
-			4'b1011:read_data_word <= cache_data[383:352];
-			4'b1100:read_data_word <= cache_data[415:384];
-			4'b1101:read_data_word <= cache_data[447:416];
-			4'b1110:read_data_word <= cache_data[479:448];
-			4'b1111:read_data_word <= cache_data[511:480];
-		endcase
 		if(we_block)begin
 			cache_data[511:0] <= write_data_block;
 			cache_data[539:512] <= {1'b1,1'b0,tag};
@@ -64,8 +45,22 @@ module cache(clk , rst , memory_address , write_data_block , write_data_word, re
 			cache_data[538] <= 1'b1;
 			cache_data[539] <= 1'b1;
 		end
-		end
 	end
+	assign read_data_word = (block_offset==4'b0000)? cache_data[31:0]:
+			(block_offset==4'b0001)? cache_data[63:32]:
+			(block_offset==4'b0010)? cache_data[95:64]:
+			(block_offset==4'b0011)? cache_data[127:96]:
+			(block_offset==4'b0100)? cache_data[159:128]:
+			(block_offset==4'b0101)? cache_data[191:160]:
+			(block_offset==4'b0110)? cache_data[223:192]:
+			(block_offset==4'b0111)? cache_data[255:224]:
+			(block_offset==4'b1000)? cache_data[287:256]:
+			(block_offset==4'b1001)? cache_data[319:288]:
+			(block_offset==4'b1010)? cache_data[351:320]:
+			(block_offset==4'b1011)? cache_data[383:352]:
+			(block_offset==4'b1100)? cache_data[415:384]:
+			(block_offset==4'b1101)? cache_data[447:416]:
+			(block_offset==4'b1110)? cache_data[479:448]:cache_data[511:480];
 	assign read_data_block = cache_data[511:0];
 	assign hit = (cache_tag == tag) & valid;
 	assign block_offset = memory_address[5:2];

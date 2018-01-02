@@ -33,7 +33,7 @@ module maindec(input  [5:0] op, output memtoreg, memwrite, branch, bne, extend, 
       6'b001011: controls <= 12'b010100001100; // STTIU
       6'b001111: controls <= 12'b010100000001; // LUI
       6'b000101: controls <= 12'b100011000100; // BNE
-      default:   controls <= 12'bxxxxxxxxxxxx; // illegal op
+      default:   controls <= 12'b000000000000; // illegal op
     endcase
 endmodule
 
@@ -64,7 +64,7 @@ module aludec(input  wire [5:0] funct,
           6'b000100: alucontrol <= 4'b0001; // sllv
           6'b000111: alucontrol <= 4'b0011; // srav
           6'b000110: alucontrol <= 4'b0101; // srlv
-          default:   alucontrol <= 4'bxxxx; // illegal op x101
+          default:   alucontrol <= 4'b0000; // illegal op x101
         endcase
     endcase
 endmodule

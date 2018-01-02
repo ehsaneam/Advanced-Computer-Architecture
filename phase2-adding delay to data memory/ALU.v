@@ -21,7 +21,7 @@ module ALU(input  [31:0] SrcAE, SrcBE, input  [3:0]  ALUControlE,
       4'b1101: ALUOutM = SrcBE << 32'd16; // lui
       4'b1110: ALUOutM = (as < bs) ? 32'd1 : 32'd0; // slt
       
-      default: ALUOutM = 32'bx; // 
+      default: ALUOutM = 32'b0; // 
     endcase
 
   assign ZeroE = (ALUOutM == 32'b0);
